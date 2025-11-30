@@ -142,9 +142,6 @@ pub enum PortcullisError {
     #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
 
-    // ------------------------------------------------------------------------
-    // Catch-all
-    // ------------------------------------------------------------------------
     #[error("{0}")]
     Other(String),
 }
@@ -389,7 +386,7 @@ impl PortcullisError {
     // Get user-safe error message
     pub fn user_message(&self) -> String {
         match self {
-            // Authentication errors - can be specific about what's wrong
+            // Authentication errors
             Self::AuthenticationRequired => "Authentication required".to_string(),
             Self::AuthenticationFailed(_) => "Authentication failed".to_string(),
             Self::InvalidJwt(_) => "Invalid authentication token".to_string(),
@@ -401,13 +398,13 @@ impl PortcullisError {
             Self::AccessDenied => "Access denied".to_string(),
             Self::InsufficientPermissions => "Insufficient permissions".to_string(),
 
-            // Certificate errors - don't leak cert details
+            // Certificate errors
             Self::CertificateValidation(_) => "Certificate validation failed".to_string(),
             Self::CertificateExpired => "Certificate expired".to_string(),
             Self::CertificateRevoked => "Certificate revoked".to_string(),
             Self::InvalidCertChain => "Invalid certificate".to_string(),
 
-            // Rate limiting - inform user when they can retry
+            // Rate limiting
             Self::RateLimitExceeded { retry_after_secs } => {
                 if let Some(secs) = retry_after_secs {
                     format!("Rate limit exceeded. Please try again in {} seconds", secs)
@@ -428,13 +425,13 @@ impl PortcullisError {
             Self::RouteNotFound => "Route not found".to_string(),
             Self::BackendNotFound(_) => "Resource not found".to_string(),
 
-            // Backend/system errors - be vague, don't leak infrastructure details
+            // Backend/system errors
             Self::BackendError(_) => "Service temporarily unavailable".to_string(),
             Self::BackendTimeout => "Service timeout. Please try again".to_string(),
             Self::AllBackendsUnavailable => "Service temporarily unavailable".to_string(),
             Self::CircuitBreakerOpen(_) => "Service temporarily unavailable".to_string(),
 
-            // Internal errors - don't leak any details
+            // Internal errors
             Self::Config(_) => "Internal server error".to_string(),
             Self::InvalidConfig(_) => "Internal server error".to_string(),
             Self::Tls(_) => "Internal server error".to_string(),
