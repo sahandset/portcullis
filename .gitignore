@@ -1,0 +1,43 @@
+# Rust build artifacts
+/target/
+Cargo.lock
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment files
+.env
+.env.local
+
+# Certificate files (NEVER commit these!)
+/certs/
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Configuration files with secrets
+config/production.yaml
+config/staging.yaml
+config/*.secret.*
+
+# Logs
+*.log
+logs/
+
+# Docker volumes
+/data/
+
+# Test outputs
+/test-results/
+coverage/
+
+# Temporary files
+*.tmp
+*.bak
